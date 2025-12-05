@@ -10,6 +10,7 @@ $(document).ready(function() {
         console.error('Required elements not found');
         return;
     }
+    
     const $uploadSection = $('#upload-section');
     const $previewSection = $('#preview-section');
     const $errorSection = $('#error-section');
@@ -21,19 +22,28 @@ $(document).ready(function() {
     const $retryBtn = $('#retry-btn');
     const $errorMessage = $('#error-message');
 
+    // Button click handler - use native DOM method for better compatibility
     $browseBtn.on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        $fileInput.click();
+        const fileInputElement = document.getElementById('file-input');
+        if (fileInputElement) {
+            fileInputElement.click();
+        } else {
+            console.error('File input element not found');
+        }
     });
 
+    // Drop zone click handler - don't trigger if clicking the button
     $dropZone.on('click', function(e) {
-        // Don't trigger if clicking the button
         if ($(e.target).is('#browse-btn') || $(e.target).closest('#browse-btn').length) {
             return;
         }
         e.preventDefault();
-        $fileInput.click();
+        const fileInputElement = document.getElementById('file-input');
+        if (fileInputElement) {
+            fileInputElement.click();
+        }
     });
 
     $dropZone.on('dragover', function(e) {
@@ -56,21 +66,21 @@ $(document).ready(function() {
         }
     });
 
-    $fileInput.change(function() {
-        if (this.files.length > 0) {
+    $fileInput.on('change', function() {
+        if (this.files && this.files.length > 0) {
             handleFile(this.files[0]);
         }
     });
 
-    $newImageBtn.click(function() {
+    $newImageBtn.on('click', function() {
         resetInterface();
     });
 
-    $retryBtn.click(function() {
+    $retryBtn.on('click', function() {
         resetInterface();
     });
 
-    $downloadBtn.click(function() {
+    $downloadBtn.on('click', function() {
         if (currentFilename) {
             window.location.href = `/download/${currentFilename}`;
         }
@@ -182,4 +192,4 @@ $(document).ready(function() {
             }
         }
     });
-}); 
+});
