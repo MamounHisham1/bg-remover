@@ -3,11 +3,10 @@ $(document).ready(function() {
 
     const $fileInput = $('#file-input');
     const $dropZone = $('#drop-zone');
-    const $browseBtn = $('#browse-btn');
     
     // Verify elements exist
-    if ($fileInput.length === 0 || $browseBtn.length === 0) {
-        console.error('Required elements not found');
+    if ($fileInput.length === 0) {
+        console.error('File input element not found');
         return;
     }
     
@@ -22,28 +21,13 @@ $(document).ready(function() {
     const $retryBtn = $('#retry-btn');
     const $errorMessage = $('#error-message');
 
-    // Button click handler - use native DOM method for better compatibility
-    $browseBtn.on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const fileInputElement = document.getElementById('file-input');
-        if (fileInputElement) {
-            fileInputElement.click();
-        } else {
-            console.error('File input element not found');
-        }
-    });
-
-    // Drop zone click handler - don't trigger if clicking the button
+    // Drop zone click handler - don't trigger if clicking the file input label
     $dropZone.on('click', function(e) {
-        if ($(e.target).is('#browse-btn') || $(e.target).closest('#browse-btn').length) {
+        if ($(e.target).is('label[for="file-input"]') || $(e.target).closest('label[for="file-input"]').length || $(e.target).is('#file-input')) {
             return;
         }
         e.preventDefault();
-        const fileInputElement = document.getElementById('file-input');
-        if (fileInputElement) {
-            fileInputElement.click();
-        }
+        $fileInput[0].click();
     });
 
     $dropZone.on('dragover', function(e) {
