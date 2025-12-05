@@ -4,6 +4,12 @@ $(document).ready(function() {
     const $fileInput = $('#file-input');
     const $dropZone = $('#drop-zone');
     const $browseBtn = $('#browse-btn');
+    
+    // Verify elements exist
+    if ($fileInput.length === 0 || $browseBtn.length === 0) {
+        console.error('Required elements not found');
+        return;
+    }
     const $uploadSection = $('#upload-section');
     const $previewSection = $('#preview-section');
     const $errorSection = $('#error-section');
@@ -15,11 +21,18 @@ $(document).ready(function() {
     const $retryBtn = $('#retry-btn');
     const $errorMessage = $('#error-message');
 
-    $browseBtn.click(function() {
+    $browseBtn.on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         $fileInput.click();
     });
 
-    $dropZone.click(function() {
+    $dropZone.on('click', function(e) {
+        // Don't trigger if clicking the button
+        if ($(e.target).is('#browse-btn') || $(e.target).closest('#browse-btn').length) {
+            return;
+        }
+        e.preventDefault();
         $fileInput.click();
     });
 
